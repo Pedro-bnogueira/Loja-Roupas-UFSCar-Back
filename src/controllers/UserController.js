@@ -13,10 +13,8 @@ const registerUser = async (req, res) => {
   try {
     const { name, email, password, accessLevel } = req.body;
 
-    // Validação básica de entrada
-    if (!name || !email || !password || !accessLevel) {
-      return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
-    }
+    // Validação dos campos com o validador de users
+    validateUserFields(name, email, password, accessLevel);
 
     // Verifica se o usuário já existe
     const existingUser = await User.findOne({ where: { email } });
@@ -54,6 +52,9 @@ const editUser = async (req, res) => {
   try {
     const { id } = req.params; // ID do usuário a ser atualizado
     const { name, email, password, accessLevel } = req.body;
+
+    // Validação dos campos com o validador
+    validateUserFields(name, email, password, accessLevel);
 
     // Encontre o usuário pelo ID
     const user = await User.findByPk(id);
@@ -109,8 +110,28 @@ const deleteUser = async (req, res) => {
   }
 };
 
+/**
+ * Função para listar todos os usuários.
+ * Apenas administradores podem acessar.
+ */
+const getAllUsers = async (req, res) => {
+  try {
+    // Busca todos os usuários, excluindo o campo 'password'
+    const users = await User.findAll({
+      attributes: { exclude: ['password'] }, // Exclui o campo 'password' da resposta
+      order: [['id', 'ASC']] // Ordena por ID de forma ascendente
+    });
+
+    return res.status(200).json({ users });
+  } catch (error) {
+    console.error('Erro ao obter usuários:', error);
+    return res.status(500).json({ message: 'Erro interno do servidor.' });
+  }
+};
+
 module.exports = {
   registerUser,
-  updateUser,
-  deleteUser
+  editUser,
+  deleteUser,
+  getAllUsers
 };
