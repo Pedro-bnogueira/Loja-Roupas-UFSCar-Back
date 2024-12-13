@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const  User  = require('../models/User'); // Importa o modelo User
+const validateUserFields = require('../validators/userValidators')
 require('dotenv').config(); // Carrega variáveis de ambiente do arquivo .env
 
 /**
