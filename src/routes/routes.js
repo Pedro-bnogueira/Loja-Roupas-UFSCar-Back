@@ -15,6 +15,9 @@ const { registerUser, editUser, deleteUser, getAllUsers } = require('../controll
 // Product Requirements
 const { createProduct, getProducts, updateProduct, deleteProduct } = require('../controllers/ProductController');
 
+// Category Requirements
+const { createCategory, getCategories, deleteCategory } = require('../controllers/CategoryController');
+
 // Stock Requirements
 const { registerStockMovement, getStockMovements, recordStockMovement } = require('../controllers/stockController');
 
@@ -37,8 +40,13 @@ routes.post('/get/users', authenticate, authorizeAdmin, getAllUsers);
 //PRODUCT
 routes.post('/new/product', authenticate, createProduct);
 routes.get('/get/products', authenticate, getProducts);
-routes.get('/update/product/:id', authenticate, updateProduct);
-routes.get('/delete/product/:id', authenticate, deleteProduct);
+routes.put('/update/product/:id', authenticate, updateProduct);
+routes.delete('/delete/product/:id', authenticate, deleteProduct);
+
+//CATEGORY
+routes.post('/new/category', authenticate, createCategory);
+routes.get('/get/categories', authenticate, getCategories);
+routes.get('/delete/category/:id', authenticate, deleteCategory);
 
 //STOCK
 routes.post('/movement/register', authenticate, authorizeAdmin, registerStockMovement);
