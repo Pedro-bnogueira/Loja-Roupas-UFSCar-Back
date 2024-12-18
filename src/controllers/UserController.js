@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const  User  = require('../models/User'); // Importa o modelo User
-const validateUserFields = require('../validators/userValidators')
+const { validateUserFields, validateUpdateUserFields } = require('../validators/userValidators')
 require('dotenv').config(); // Carrega variáveis de ambiente do arquivo .env
 
 /**
@@ -55,7 +55,7 @@ const editUser = async (req, res) => {
     const { name, email, password, accessLevel } = req.body;
 
     // Validação dos campos com o validador
-    validateUserFields(name, email, password, accessLevel);
+    validateUpdateUserFields(name, email, accessLevel);
 
     // Encontre o usuário pelo ID
     const user = await User.findByPk(id);
