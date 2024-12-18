@@ -8,7 +8,7 @@ const Product = sequelize.define('Product',
       type: DataTypes.STRING,
       allowNull: false,
     },
-    description: {
+    brand: {
       type: DataTypes.TEXT,
     },
     price: {
@@ -23,15 +23,14 @@ const Product = sequelize.define('Product',
       type: DataTypes.STRING,
       allowNull: false,
     },
-    stockQuantity: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0,
-    },
   },
   {
     tableName: 'Product',
   }
 );
+
+// Definir a associação: Uma categoria tem muitos produtos
+Category.hasMany(Product, { as: 'products', foreignKey: 'categoryId' });
 
 // Relacionamento: Um produto pertence a uma categoria
 Product.belongsTo(Category, {

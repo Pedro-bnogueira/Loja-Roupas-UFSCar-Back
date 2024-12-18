@@ -3,31 +3,35 @@ const Category = require('../models/Category');
 
 /**
  * Cria um novo produto.
- * Espera receber do body: name, description, price, size, color, stockQuantity, categoryId
+ * Espera do body: name, brand, price, size, color, category 
  */
 const createProduct = async (req, res) => {
   try {
-    const { name, description, price, size, color, stockQuantity, categoryId } = req.body;
+    const { name, brand, price, size, color, category } = req.body;
 
     // Validação básica
-    if (!name || !price ) {
-      return res.status(400).json({ message: 'Dados insuficientes.' });
+    if (!name || !price || !size || !color) {
+      return res.status(400).json({ message: 'Dados insuficientes. É necessário fornecer nome, preço, tamanho e cor.' });
     }
-
-    // Verificar se a categoria existe
-    const category = await Category.findByPk(categoryId);
-    if (!category) {
-      return res.status(404).json({ message: 'Categoria não encontrada.' });
+    
+    // Se a categoria for informada, verificar se existe
+    let validCategory = null;
+    if (category) {
+      validCategory = await Category.findOne({where: {name: category}});
+      if (!validCategory) {
+        return res.status(404).json({ message: 'Categoria não encontrada.' });
+      }
     }
-
+    console.log(category)
+    console.log("++++++++++++++++++++++++++++++++")
+    console.log(validCategory)
     const newProduct = await Product.create({
       name,
-      description,
+      brand: brand || '',
       price,
       size,
       color,
-      stockQuantity: stockQuantity || 0,
-      categoryId
+      categoryId: validCategory ? validCategory.id : null,
     });
 
     return res.status(201).json({ message: 'Produto cadastrado com sucesso!', product: newProduct });
@@ -38,7 +42,7 @@ const createProduct = async (req, res) => {
 };
 
 /**
- * Função para obter todos os produtos.
+ * Obtém todos os produtos, incluindo a categoria (caso exista).
  */
 const getProducts = async (req, res) => {
   try {
@@ -53,35 +57,37 @@ const getProducts = async (req, res) => {
 };
 
 /**
- * Atualiza um produto existente por ID.
- * Espera receber do body quaisquer campos: name, description, price, size, color, stockQuantity, categoryId
+ * Atualiza um produto por ID.
+ * Espera do body: name, brand, price, size, color, categoryId (opcional)
  */
 const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description, price, size, color, stockQuantity, categoryId } = req.body;
-
+    const { name, brand, price, size, color, category } = req.body;
+    console.log("ENTROUUUUUUUUUUUUUU")
     const product = await Product.findByPk(id);
     if (!product) {
       return res.status(404).json({ message: 'Produto não encontrado.' });
     }
 
+    console.log('+__+_+_+_+_+_+_+__')
+    console.log(category)
+
     // Se for atualizar a categoria, verificar se existe
-    if (categoryId) {
-      const category = await Category.findByPk(categoryId);
+    let validCategory = null;
+    if (category) {
+      const validCategory = await Category.findOne({where: {name: category}});
       if (!category) {
         return res.status(404).json({ message: 'Categoria não encontrada.' });
       }
+      product.categoryId = category.id;
     }
 
-    // Atualização dos campos
-    if (name) product.name = name;
-    if (description) product.description = description;
+    if (name !== undefined) product.name = name;
+    if (brand !== undefined) product.brand = brand;
     if (price !== undefined) product.price = price;
-    if (size) product.size = size;
-    if (color) product.color = color;
-    if (stockQuantity !== undefined) product.stockQuantity = stockQuantity;
-    if (categoryId) product.categoryId = categoryId;
+    if (size !== undefined) product.size = size;
+    if (color !== undefined) product.color = color;
 
     await product.save();
 
@@ -98,7 +104,8 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
-
+    console.log("--------------------------------------------")
+    console.log(id)
     const product = await Product.findByPk(id);
     if (!product) {
       return res.status(404).json({ message: 'Produto não encontrado.' });
