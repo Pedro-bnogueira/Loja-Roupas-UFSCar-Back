@@ -87,14 +87,14 @@ const login = async (req, res) => {
 
         // Validação básica de entrada
         if (!email || !password || email.trim() === '' || password.trim() === '') {
-            return res.status(400).json({ message: 'Insufficient data provided.' });
+            return res.status(400).json({ message: 'Preencha os campos corretamente.' });
         }
 
         // Busca o usuário pelo email
         const user = await User.findOne({ where: { email } });
 
         if (!user) {
-            return res.status(404).json({ message: 'User not found.' });
+            return res.status(404).json({ message: 'Usuário não cadastrado.' });
         }
 
         // Verifica se a senha está correta
@@ -102,7 +102,7 @@ const login = async (req, res) => {
         console.log(user.password)
         console.log(isPasswordValid)
         if (!isPasswordValid) {
-            return res.status(401).json({ message: 'Invalid credentials.' });
+            return res.status(401).json({ message: 'Email ou senha inválidos.' });
         }
 
         // Gera o token JWT
@@ -125,10 +125,10 @@ const login = async (req, res) => {
         console.log('Authentication successful for user:', email);
         console.log('JWT Token:', token);
 
-        return res.status(200).json({ status: 'success', message: 'Logged in successfully.' });
+        return res.status(200).json({ status: 'success', message: 'Login realizado com sucesso.' });
     } catch (error) {
         console.error('Login Error:', error);
-        return res.status(500).json({ message: 'Internal server error.' });
+        return res.status(500).json({ message: 'Erro de servidor.' });
     }
 };
 
