@@ -82,12 +82,15 @@ const updateProduct = async (req, res) => {
     // Se for atualizar a categoria, verificar se existe
     let validCategory = null;
     if (category) {
-      const validCategory = await Category.findOne({where: {name: category}});
-      if (!category) {
+      validCategory = await Category.findOne({ where: { name: category } });
+      if (!validCategory) { // Correção aqui
         return res.status(404).json({ message: 'Categoria não encontrada.' });
       }
-      product.categoryId = category.id;
+      product.categoryId = validCategory.id; // Correção aqui
     }
+
+  
+    console.log(product)
 
     if (name !== undefined) product.name = name;
     if (brand !== undefined) product.brand = brand;
@@ -97,7 +100,13 @@ const updateProduct = async (req, res) => {
 
     await product.save();
 
-    return res.status(200).json({ message: 'Produto atualizado com sucesso!', product });
+    // Objeto para retorar para o front com a categoria completa para correta visualização
+    // Buscar o produto criado com a categoria associada
+    const editedProduct = await Product.findByPk(id, {
+      include: [{ model: Category, as: 'category' }],
+    });
+
+    return res.status(200).json({ message: 'Produto atualizado com sucesso!', editedProduct });
   } catch (error) {
     console.error('Erro ao atualizar produto:', error);
     return res.status(500).json({ message: 'Erro interno do servidor.' });

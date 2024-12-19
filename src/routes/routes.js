@@ -46,7 +46,7 @@ routes.delete('/delete/product/:id', authenticate, deleteProduct);
 //CATEGORY
 routes.post('/new/category', authenticate, createCategory);
 routes.get('/get/categories', authenticate, getCategories);
-routes.get('/delete/category/:id', authenticate, deleteCategory);
+routes.delete('/delete/category/:id', authenticate, deleteCategory);
 
 //STOCK
 routes.post('/movement/register', authenticate, authorizeAdmin, registerStockMovement);
