@@ -34,7 +34,13 @@ const createProduct = async (req, res) => {
       categoryId: validCategory ? validCategory.id : null,
     });
 
-    return res.status(201).json({ message: 'Produto cadastrado com sucesso!', product: newProduct });
+    // Objeto para retorar para o front com a categoria completa para correta visualização
+    // Buscar o produto criado com a categoria associada
+    const createdProduct = await Product.findByPk(newProduct.id, {
+      include: [{ model: Category, as: 'category' }],
+    });
+
+    return res.status(201).json({ message: 'Produto cadastrado com sucesso!', product: createdProduct });
   } catch (error) {
     console.error('Erro ao criar produto:', error);
     return res.status(500).json({ message: 'Erro interno do servidor.' });
