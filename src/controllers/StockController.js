@@ -18,9 +18,9 @@ const registerStockMovement = async (req, res) => {
     }
 
     // Atualiza a quantidade de estoque do produto
-    if (operationType === 'entrada') {
+    if (operationType === 'in') {
       product.stockQuantity += quantity;
-    } else if (operationType === 'saida') {
+    } else if (operationType === 'out') {
       if (product.stockQuantity < quantity) {
         return res.status(400).json({ message: 'Estoque insuficiente para a operação.' });
       }
@@ -48,14 +48,37 @@ const registerStockMovement = async (req, res) => {
 /**
  * Função para obter o histórico de movimentações de estoque.
  */
-const getStockMovements = async (req, res) => {
+const getStock = async (req, res) => {
   try {
-    const stockMovements = await Stock.findAll({
-      include: [{ model: Product, as: 'product' }],
+    // Buscar todos os estoques, incluindo os dados do produto associado
+    const stockData = await Stock.findAll({
+      include: [
+        {
+          model: Product,
+          as: 'product',
+          attributes: ['id', 'name', 'brand', 'price', 'size', 'color'], // Dados do produto
+        },
+      ],
     });
-    return res.status(200).json({ stockMovements });
+
+    // Transformar os dados no formato desejado, se necessário
+    const formattedStock = stockData.map((stock) => ({
+      stockId: stock.id,
+      productId: stock.productId,
+      quantity: stock.quantity,
+      product: {
+        id: stock.product.id,
+        name: stock.product.name,
+        brand: stock.product.brand,
+        price: stock.product.price,
+        size: stock.product.size,
+        color: stock.product.color,
+      },
+    }));
+
+    return res.status(200).json({ stock: formattedStock });
   } catch (error) {
-    console.error('Erro ao obter movimentações de estoque:', error);
+    console.error('Erro ao obter estoque:', error);
     return res.status(500).json({ message: 'Erro interno do servidor.' });
   }
 };
@@ -106,6 +129,6 @@ const recordStockMovement = async (req, res) => {
 
 module.exports = {
   registerStockMovement,
-  getStockMovements,
+  getStock,
   recordStockMovement,
 };
