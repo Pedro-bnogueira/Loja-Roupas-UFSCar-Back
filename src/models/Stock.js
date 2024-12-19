@@ -15,17 +15,9 @@ const Stock = sequelize.define('Stock',
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
-    type: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      // Pode ser 'entrada' ou 'saída'
-    },
     operationType: {
-      type: DataTypes.ENUM('entrada', 'saida'),
+      type: DataTypes.ENUM('in', 'out'),
       allowNull: false,
-    },
-    description: {
-      type: DataTypes.STRING,
     },
     alertThreshold: {
       type: DataTypes.INTEGER,
