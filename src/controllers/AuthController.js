@@ -108,7 +108,7 @@ const login = async (req, res) => {
         // Gera o token JWT
         const tokenPayload = { id: user.id, accessLevel: user.accessLevel, clientId: user.clientId };
         const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, {
-            expiresIn: '30m', // Token expira em 30 minutos
+            expiresIn: '120m', // Token expira em 120 minutos
             algorithm: 'HS256',
         });
 
@@ -116,7 +116,7 @@ const login = async (req, res) => {
         await ActiveSession.upsert({
             user: email,
             session: token,
-            expiresat: new Date(Date.now() + 30 * 60 * 1000), // 30 minutos a partir de agora
+            expiresat: new Date(Date.now() + 120 * 60 * 1000), // 120 minutos a partir de agora
         });
 
         // Define o cookie com o token JWT
