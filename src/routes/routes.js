@@ -19,7 +19,7 @@ const { createProduct, getProducts, updateProduct, deleteProduct } = require('..
 const { createCategory, getCategories, deleteCategory } = require('../controllers/CategoryController');
 
 // Stock Requirements
-const { registerStockMovement, getStock, recordStockMovement } = require('../controllers/StockController');
+const { registerStockMovement, getStock, getTransactionHistory } = require('../controllers/StockController');
 
 // Return/Exchange Requirements
 const { createReturnExchange } = require('../controllers/ReturnExchangeController');
@@ -50,8 +50,8 @@ routes.delete('/delete/category/:id', authenticate, deleteCategory);
 
 //STOCK
 routes.post('/movement/register', authenticate, authorizeAdmin, registerStockMovement);
-routes.post('/movement/record', authenticate, authorizeAdmin, recordStockMovement);
 routes.get('/get/stock', getStock);
+routes.get('/get/transactions', getTransactionHistory);
 
 //RETURN/EXCHANGE
 routes.post('/create/exchange', authenticate, createReturnExchange);
