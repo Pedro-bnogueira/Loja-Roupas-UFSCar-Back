@@ -45,9 +45,6 @@ const registerStockMovement = async (req, res) => {
       return res.status(404).json({ message: 'Produto não encontrado.' });
     }
 
-    // ----------------------------------------------
-    // Lógica de Ajuste de Estoque no Model "Product"
-    // ----------------------------------------------
     // Verificar se o produto tem campo stockQuantity ou algo similar
     // Se não tiver, crie esse campo no model Product (ex. "stockQuantity: { type: DataTypes.INTEGER, ... }")
     if (type === 'out') {
@@ -66,9 +63,7 @@ const registerStockMovement = async (req, res) => {
     // Salvar atualização do produto
     await product.save({ transaction: t });
 
-    // ----------------------------------------------
     // Registro no "TransactionHistory"
-    // ----------------------------------------------
     const transactionHistory = await TransactionHistory.create({
       productId,
       type,
@@ -79,9 +74,7 @@ const registerStockMovement = async (req, res) => {
       userId,
     }, { transaction: t });
 
-    // ----------------------------------------------
     // Registro no Model "Stock"
-    // ----------------------------------------------
     // Verifica se já existe um registro de Stock para esse productId
     let stockEntry = await Stock.findOne({
       where: { productId },
