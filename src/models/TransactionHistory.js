@@ -19,7 +19,7 @@ const TransactionHistory = sequelize.define('TransactionHistory',
       allowNull: false,
     },
     type: {
-      type: DataTypes.ENUM('in', 'out'),
+      type: DataTypes.ENUM('in', 'out', 'return'),
       allowNull: false,
     },
     supplierOrBuyer: {
@@ -37,6 +37,11 @@ const TransactionHistory = sequelize.define('TransactionHistory',
     transactionDate: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
+    },
+    isReturned: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false, // False para transações normais
+      allowNull: false,
     },
     userId: {
       type: DataTypes.INTEGER,
