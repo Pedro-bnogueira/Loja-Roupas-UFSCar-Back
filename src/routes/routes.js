@@ -22,7 +22,7 @@ const { createCategory, getCategories, deleteCategory } = require('../controller
 const { registerStockMovement, getStock, getTransactionHistory } = require('../controllers/StockController');
 
 // Return/Exchange Requirements
-const { createReturnExchange } = require('../controllers/ReturnExchangeController');
+const { registerReturn } = require('../controllers/ReturnExchangeController');
 
 //AUTH
 routes.post('/sign', login)
@@ -54,6 +54,6 @@ routes.get('/get/stock', getStock);
 routes.get('/get/transactions', getTransactionHistory);
 
 //RETURN/EXCHANGE
-routes.post('/create/exchange', authenticate, createReturnExchange);
+routes.post('/return/register', authenticate, registerReturn);
 
 module.exports = routes;
