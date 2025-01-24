@@ -85,30 +85,31 @@ const registerStockMovement = async (req, res) => {
       // Se não existir, cria
       stockEntry = await Stock.create({
         productId,
-        quantity: 0, // Inicia com 0, depois ajusta
+        quantity: quantity, 
         operationType: type,
         alertThreshold: null,
       }, { transaction: t });
-    }
-
-    // Ajusta o 'Stock' com base nessa movimentação
-    if (type === 'in') {
-      // Incrementa o campo "quantity" do Stock
-      stockEntry.quantity += quantity;
     } else {
-      // Decrementa
-      // Verifica se não vai ficar negativo (pode variar conforme sua lógica)
-      if (stockEntry.quantity < quantity) {
-        // Se o stockEntry não puder ficar negativo
-        // ou se você quiser apenas registrar o movimento:
-        // fica a critério da regra de negócio
-        stockEntry.quantity -= quantity;
+      // Ajusta o 'Stock' com base nessa movimentação
+      if (type === 'in') {
+        // Incrementa o campo "quantity" do Stock
+        stockEntry.quantity += quantity;
       } else {
-        stockEntry.quantity -= quantity;
+        // Decrementa
+        // Verifica se não vai ficar negativo (pode variar conforme sua lógica)
+        if (stockEntry.quantity < quantity) {
+          // Se o stockEntry não puder ficar negativo
+          // ou se você quiser apenas registrar o movimento:
+          // fica a critério da regra de negócio
+          stockEntry.quantity -= quantity;
+        } else {
+          stockEntry.quantity -= quantity;
+        }
       }
     }
 
-    // Ajustar operationType (opcional, pois cada movimento pode ter seu log)
+    
+
     stockEntry.operationType = type;
 
     // Verificar se o estoque é baixo (alertThreshold)
@@ -123,6 +124,8 @@ const registerStockMovement = async (req, res) => {
 
     // Confirma a transação
     await t.commit();
+
+    console.log(transactionHistory)
 
     // Retorna o registro de transação recém-criado
     return res.status(201).json({
