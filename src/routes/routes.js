@@ -23,6 +23,7 @@ const { registerStockMovement, getStock, getTransactionHistory } = require('../c
 
 // Return/Exchange Requirements
 const { registerReturn } = require('../controllers/ReturnExchangeController');
+const { registerExchange } = require('../controllers/ReturnExchangeController');
 
 //AUTH
 routes.post('/sign', login)
@@ -55,5 +56,6 @@ routes.get('/get/transactions', getTransactionHistory);
 
 //RETURN/EXCHANGE
 routes.post('/return/register', authenticate, registerReturn);
+routes.post('/exchange/register', authenticate, registerExchange);
 
 module.exports = routes;

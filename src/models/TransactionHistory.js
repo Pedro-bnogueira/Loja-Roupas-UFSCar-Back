@@ -19,7 +19,7 @@ const TransactionHistory = sequelize.define('TransactionHistory',
       allowNull: false,
     },
     type: {
-      type: DataTypes.ENUM('in', 'out', 'return'),
+      type: DataTypes.ENUM('in', 'out', 'return', 'exchange_in', 'exchange_out'),
       allowNull: false,
     },
     supplierOrBuyer: {
