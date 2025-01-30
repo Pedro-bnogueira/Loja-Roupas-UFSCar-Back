@@ -25,6 +25,9 @@ const { registerStockMovement, getStock, getTransactionHistory } = require('../c
 const { registerReturn } = require('../controllers/ReturnExchangeController');
 const { registerExchange } = require('../controllers/ReturnExchangeController');
 
+// Dashboard Requirements
+const { getDashboardStats } = require('../controllers/DashboardController')
+
 //AUTH
 routes.post('/sign', login)
 routes.post('/auth', auth)
@@ -57,5 +60,8 @@ routes.get('/get/transactions', getTransactionHistory);
 //RETURN/EXCHANGE
 routes.post('/return/register', authenticate, registerReturn);
 routes.post('/exchange/register', authenticate, registerExchange);
+
+// DASHBOARD
+routes.get("/dashboard", authenticate, getDashboardStats);
 
 module.exports = routes;
