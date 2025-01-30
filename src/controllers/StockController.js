@@ -38,8 +38,11 @@ const registerStockMovement = async (req, res) => {
       return res.status(401).json({ message: 'Usuário não autenticado.' });
     }
 
-    // Buscar o produto
-    const product = await Product.findByPk(productId, { transaction: t });
+    // Buscar o produto com seu alertThreshold
+    const product = await Product.findByPk(productId, { 
+      transaction: t,
+      attributes: ['id', 'name', 'alertThreshold', 'stockQuantity']
+    });
     if (!product) {
       await t.rollback();
       return res.status(404).json({ message: 'Produto não encontrado.' });
@@ -87,7 +90,6 @@ const registerStockMovement = async (req, res) => {
         productId,
         quantity: quantity, 
         operationType: type,
-        alertThreshold: null,
       }, { transaction: t });
     } else {
       // Ajusta o 'Stock' com base nessa movimentação
@@ -112,12 +114,10 @@ const registerStockMovement = async (req, res) => {
 
     stockEntry.operationType = type;
 
-    // Verificar se o estoque é baixo (alertThreshold)
-    const alertThreshold = stockEntry.alertThreshold || 5;
-    if (stockEntry.quantity <= alertThreshold) {
-      stockEntry.alertThreshold = alertThreshold; // Exemplo: define threshold se não existir
-      console.log(`Alerta: O produto ${product.name} está com estoque baixo. Quantidade: ${stockEntry.quantity}`);
-      // Enviar e-mail ou disparar notificação, se desejado
+     // Verificação de estoque baixo
+    if (product.alertThreshold && stockEntry.quantity <= product.alertThreshold) {
+      console.log(`Alerta: ${product.name} está abaixo do limite (${stockEntry.quantity}/${product.alertThreshold})`);
+      // Disparar notificação...
     }
 
     await stockEntry.save({ transaction: t });
@@ -151,7 +151,7 @@ const getStock = async (req, res) => {
         {
           model: Product,
           as: 'product',
-          attributes: ['id', 'name', 'brand', 'price', 'size', 'color'], // Dados do produto
+          attributes: ['id', 'name', 'brand', 'price', 'size', 'color', 'alertThreshold'], // Dados do produto
         },
       ],
     });
@@ -168,6 +168,7 @@ const getStock = async (req, res) => {
         price: stock.product.price,
         size: stock.product.size,
         color: stock.product.color,
+        alertThreshold: stock.product.alertThreshold,
       },
     }));
 

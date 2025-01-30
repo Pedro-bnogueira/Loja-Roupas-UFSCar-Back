@@ -19,10 +19,6 @@ const Stock = sequelize.define('Stock',
       type: DataTypes.ENUM('in', 'out'),
       allowNull: false,
     },
-    alertThreshold: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
   },
   {
     tableName: 'Stock',

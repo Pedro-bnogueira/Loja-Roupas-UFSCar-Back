@@ -23,6 +23,11 @@ const Product = sequelize.define('Product',
       type: DataTypes.STRING,
       allowNull: false,
     },
+    alertThreshold: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: 5 // Valor padrão
+    }
   },
   {
     tableName: 'Product',

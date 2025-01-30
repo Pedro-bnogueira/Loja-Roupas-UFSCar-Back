@@ -7,7 +7,7 @@ const Category = require('../models/Category');
  */
 const createProduct = async (req, res) => {
   try {
-    const { name, brand, price, size, color, category } = req.body;
+    const { name, brand, price, size, color, category, alertThreshold } = req.body;
 
     // Validação básica
     if (!name || !price || !size || !color) {
@@ -32,6 +32,7 @@ const createProduct = async (req, res) => {
       size,
       color,
       categoryId: validCategory ? validCategory.id : null,
+      alertThreshold: alertThreshold || 10 // Valor padrão
     });
 
     // Objeto para retorar para o front com a categoria completa para correta visualização
@@ -69,7 +70,7 @@ const getProducts = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, brand, price, size, color, category } = req.body;
+    const { name, brand, price, size, color, category, alertThreshold } = req.body;
     console.log("ENTROUUUUUUUUUUUUUU")
     const product = await Product.findByPk(id);
     if (!product) {
@@ -97,6 +98,7 @@ const updateProduct = async (req, res) => {
     if (price !== undefined) product.price = price;
     if (size !== undefined) product.size = size;
     if (color !== undefined) product.color = color;
+    if (alertThreshold !== undefined) product.alertThreshold = alertThreshold;
 
     await product.save();
 
