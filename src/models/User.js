@@ -12,6 +12,11 @@ const bcrypt = require('bcrypt'); // Importa o bcrypt para hash de senhas
 //  @property {string} accessLevel - Nível de acesso do usuário.
 //  
 const User = sequelize.define('User', {
+    createdDate: { 
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW
+    },
     name: {
         type: DataTypes.STRING,
         allowNull: false,
