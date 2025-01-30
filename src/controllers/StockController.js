@@ -180,6 +180,52 @@ const getStock = async (req, res) => {
 };
 
 /**
+ * Atualiza a quantidade de um item no estoque com base no productId.
+ * 
+ * @param {object} req - Requisição do Express
+ * @param {object} res - Resposta do Express
+ */
+const updateStockQuantity = async (req, res) => {
+  const t = await sequelize.transaction();
+  console.log(req.body)
+  try {
+      const { id } = req.params; // ID do estoque
+      const { quantity } = req.body; // Nova quantidade
+
+      // Validação: Certificar-se de que a quantidade foi fornecida e é um número válido
+      if (quantity === undefined || isNaN(quantity) || quantity < 0) {
+          await t.rollback();
+          return res.status(400).json({ message: "Quantidade inválida. Deve ser um número maior ou igual a zero." });
+      }
+
+      // Buscar a entrada de estoque pelo ID
+      const stockEntry = await Stock.findByPk(id, { transaction: t });
+
+      if (!stockEntry) {
+          await t.rollback();
+          return res.status(404).json({ message: "Entrada de estoque não encontrada." });
+      }
+
+      // Atualizar a quantidade no banco de dados
+      stockEntry.quantity = quantity;
+      await stockEntry.save({ transaction: t });
+
+      // Confirmar a transação
+      await t.commit();
+
+      return res.status(200).json({
+          message: "Quantidade do estoque atualizada com sucesso!",
+          updatedStock: stockEntry
+      });
+
+  } catch (error) {
+      await t.rollback();
+      console.error("Erro ao atualizar a quantidade do estoque:", error);
+      return res.status(500).json({ message: "Erro interno do servidor." });
+  }
+};
+
+/**
  * Função para obter o histórico de transações.
  */
 const getTransactionHistory = async (req, res) => {
@@ -211,4 +257,5 @@ module.exports = {
   registerStockMovement,
   getStock,
   getTransactionHistory,
+  updateStockQuantity
 };
