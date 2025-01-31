@@ -41,7 +41,7 @@ const registerStockMovement = async (req, res) => {
     // Buscar o produto com seu alertThreshold
     const product = await Product.findByPk(productId, { 
       transaction: t,
-      attributes: ['id', 'name', 'alertThreshold', 'stockQuantity']
+      attributes: ['id', 'name', 'alertThreshold']
     });
     if (!product) {
       await t.rollback();
