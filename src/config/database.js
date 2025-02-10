@@ -15,14 +15,17 @@ const sequelize = new Sequelize(
   }
 );
 
-// Testa a conexão com o banco de dados
-(async () => {
-  try {
-    await sequelize.authenticate();
-    console.log('Conexão com o MySQL estabelecida com sucesso.');
-  } catch (error) {
-    console.error('Não foi possível conectar ao MySQL:', error);
-  }
-})();
+// Apenas tenta se conectar se não estivermos em ambiente de teste
+if (process.env.NODE_ENV !== 'test') {
+  // Testa a conexão com o banco de dados
+  (async () => {
+    try {
+      await sequelize.authenticate();
+      console.log('Conexão com o MySQL estabelecida com sucesso.');
+    } catch (error) {
+      console.error('Não foi possível conectar ao MySQL:', error);
+    }
+  })();
+}
 
 module.exports = sequelize;
