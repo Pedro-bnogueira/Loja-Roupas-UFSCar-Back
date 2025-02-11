@@ -67,7 +67,14 @@ const registerReturn = async (req, res) => {
         if (stockEntry) {
             stockEntry.quantity += originalTransaction.quantity;
             await stockEntry.save({ transaction: t });
-        }
+        } else {
+            // Criar novo registro de Stock se não existir
+            await Stock.create({
+              productId: product.id,
+              quantity: originalTransaction.quantity,
+              operationType: 'in'
+            }, { transaction: t });
+          }
 
         // Registrar no histórico de transações que foi feita uma devolução
         const newTransaction = await TransactionHistory.create(
@@ -162,10 +169,10 @@ const registerExchange = async (req, res) => {
         await originalTransaction.save({ transaction: t });
 
         // Calcular o valor total da transação original
-        const originalTotalValue = parseFloat(originalTransaction.transactionPrice);
+        const originalTotalValue = parseFloat(originalTransaction.transactionPrice).toFixed(2);
 
         // Calcular o valor total dos novos produtos selecionados
-        let newTotalValue = 0;
+        let newTotalValueRaw = 0;
         for (const np of newProducts) {
             const product = await Product.findByPk(np.productId, { transaction: t });
             if (!product) {
@@ -173,8 +180,10 @@ const registerExchange = async (req, res) => {
                 console.log(`Produto com ID ${np.productId} não encontrado.`)
                 return res.status(404).json({ message: `Produto com ID ${np.productId} não encontrado.` });
             }
-            newTotalValue += parseFloat(product.price) * parseInt(np.quantity, 10);
+            newTotalValueRaw += parseFloat(product.price) * parseInt(np.quantity, 10);
         }
+
+        const newTotalValue = parseFloat(newTotalValueRaw).toFixed(2);
 
         // Validar se o valor total dos novos produtos é igual ao original
         if (newTotalValue !== originalTotalValue) {
