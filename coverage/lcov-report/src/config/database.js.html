@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">50% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/10</span>
+                <span class='fraction'>6/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/2</span>
+                <span class='fraction'>2/4</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">50% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>5/10</span>
+                <span class='fraction'>6/12</span>
             </div>
         
             
@@ -94,26 +94,48 @@
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">22x</span>
+<span class="cline-any cline-yes">22x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">22x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">22x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">22x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -124,33 +146,44 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">22x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const { Sequelize } = require('sequelize');
-require("dotenv").config({ path: "./.env" }); // Carrega as variáveis de ambiente
+require('dotenv').config({ path: "./.env" });
 &nbsp;
-// Inicializa a conexão Sequelize usando variáveis de ambiente para segurança
-const sequelize = new Sequelize(
-  process.env.DB_NAME,     // Nome do banco de dados
-  process.env.DB_USER,     // Usuário do banco de dados
-  process.env.DB_PASSWORD, // Senha do banco de dados
-  {
-    host: process.env.DB_HOST, // Host do banco de dados
-    dialect: 'mysql',          // Dialeto do Sequelize para MySQL
+let sequelize;
+&nbsp;
+if (process.env.NODE_ENV === 'test') {
+  // Em ambiente de teste, usa SQLite em memória
+  sequelize = new Sequelize('sqlite::memory:', {
+    logging: false, // Desativa logs para testes
     define: {
-      timestamps: false, // Desativa automaticamente os campos createdAt e updatedAt
+      timestamps: false,
     },
-  }
-);
+  });
+} else <span class="missing-if-branch" title="else path not taken" >E</span>{
+  // Configuração padrão para outros ambientes (ex.: development, production)
+<span class="cstat-no" title="statement not covered" >  sequelize = new Sequelize(</span>
+    process.env.DB_NAME,     // Nome do banco de dados
+    process.env.DB_USER,     // Usuário do banco de dados
+    process.env.DB_PASSWORD, // Senha do banco de dados
+    {
+      host: process.env.DB_HOST, // Host do banco de dados
+      dialect: 'mysql',          // Por exemplo, MySQL
+      define: {
+        timestamps: false, // Desativa automaticamente os campos createdAt e updatedAt
+      },
+    }
+  );
+}
 &nbsp;
-// Apenas tenta se conectar se não estivermos em ambiente de teste
+// Testa a conexão em ambientes não de teste
 <span class="missing-if-branch" title="if path not taken" >I</span>if (process.env.NODE_ENV !== 'test') {
-  // Testa a conexão com o banco de dados
 <span class="cstat-no" title="statement not covered" >  (<span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
 <span class="cstat-no" title="statement not covered" >      await sequelize.authenticate();</span>
-<span class="cstat-no" title="statement not covered" >      console.log('Conexão com o MySQL estabelecida com sucesso.');</span>
+<span class="cstat-no" title="statement not covered" >      console.log('Conexão com o banco de dados estabelecida com sucesso.');</span>
     } catch (error) {
-<span class="cstat-no" title="statement not covered" >      console.error('Não foi possível conectar ao MySQL:', error);</span>
+<span class="cstat-no" title="statement not covered" >      console.error('Não foi possível conectar ao banco de dados:', error);</span>
     }
   })();
 }
@@ -163,7 +196,7 @@ module.exports = sequelize;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-02-10T04:16:58.336Z
+                at 2025-02-11T04:58:35.739Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
