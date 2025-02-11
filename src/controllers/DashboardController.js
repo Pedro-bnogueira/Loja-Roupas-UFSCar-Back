@@ -17,7 +17,7 @@ const getDashboardStats = async (req, res) => {
             await t.rollback();
             return res
                 .status(401)
-                .json({ message: "Usuário não autenticado." });
+                .json({ message: "Sem token de autenticação" });
         }
 
         // Função para gerar série temporal completa

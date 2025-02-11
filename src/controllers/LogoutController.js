@@ -19,8 +19,8 @@ const logout = async (req, res) => {
         // Verifica se o token está presente
         if (!token) {
             return res
-                .status(400)
-                .json({ message: "No token provided. Already logged out." });
+                .status(401) 
+                .json({ message: "Sem token de autenticação." });
         }
 
         // Decodifica o token para obter o email do usuário
