@@ -3,7 +3,7 @@ module.exports = {
     verbose: true,
 
     // Retira os console.log durante a execução dos testes
-    // silent: true,
+    //silent: true,
     
     // Define o ambiente de testes para Node.js
     testEnvironment: 'node',
@@ -14,5 +14,8 @@ module.exports = {
     // Coleta informações de cobertura de teste e salva no diretório "coverage"
     collectCoverage: true,
     coverageDirectory: "coverage",
+
+    setupFilesAfterEnv: ["<rootDir>/tests/setup.js"],
+    globalTeardown: "<rootDir>/tests/teardown.js",
   };
   
