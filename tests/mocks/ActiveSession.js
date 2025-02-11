@@ -1,3 +1,5 @@
 module.exports = {
-    destroy: jest.fn()
+    upsert: jest.fn(),
+    findOne: jest.fn(),
+    destroy: jest.fn(),
 };
