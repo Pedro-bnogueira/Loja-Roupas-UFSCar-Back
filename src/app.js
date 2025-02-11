@@ -11,7 +11,7 @@ const port = process.env.PORT;
 app.use(bodyparser.json({ limit: "10mb" }));
 app.use(express.urlencoded());
 app.use(cookieParser());
-app.use(cors({ origin: ["http://localhost:3000"], credentials: true }));
+app.use(cors({ origin: [process.env.CONNECTION], credentials: true }));
 
 // Rotas
 app.use("/api", routes);
