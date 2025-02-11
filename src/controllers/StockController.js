@@ -48,24 +48,6 @@ const registerStockMovement = async (req, res) => {
       return res.status(404).json({ message: 'Produto não encontrado.' });
     }
 
-    // Verificar se o produto tem campo stockQuantity ou algo similar
-    // Se não tiver, crie esse campo no model Product (ex. "stockQuantity: { type: DataTypes.INTEGER, ... }")
-    if (type === 'out') {
-      // Se for saída, verifica se há quantidade suficiente
-      if (product.stockQuantity < quantity) {
-        await t.rollback();
-        return res.status(400).json({ message: 'Estoque insuficiente para a operação.' });
-      }
-      // Decrementar quantidade
-      product.stockQuantity -= quantity;
-    } else {
-      // Se for entrada ('in'), incrementa quantidade
-      product.stockQuantity += quantity;
-    }
-
-    // Salvar atualização do produto
-    await product.save({ transaction: t });
-
     // Registro no "TransactionHistory"
     const transactionHistory = await TransactionHistory.create({
       productId,
@@ -97,30 +79,21 @@ const registerStockMovement = async (req, res) => {
         // Incrementa o campo "quantity" do Stock
         stockEntry.quantity += quantity;
       } else {
-        // Decrementa
-        // Verifica se não vai ficar negativo (pode variar conforme sua lógica)
         if (stockEntry.quantity < quantity) {
-          // Se o stockEntry não puder ficar negativo
-          // ou se você quiser apenas registrar o movimento:
-          // fica a critério da regra de negócio
-          stockEntry.quantity -= quantity;
-        } else {
-          stockEntry.quantity -= quantity;
+          await t.rollback();
+          return res.status(400).json({ message: 'Estoque insuficiente para a operação.' });
         }
+        
+        stockEntry.quantity -= quantity;
       }
+      stockEntry.operationType = type;
+      // Verificação de estoque baixo
+      if (product.alertThreshold && stockEntry.quantity <= product.alertThreshold) {
+        console.log(`Alerta: ${product.name} está abaixo do limite (${stockEntry.quantity}/${product.alertThreshold})`);
+        // Disparar notificação...
+      }
+      await stockEntry.save({ transaction: t });
     }
-
-    
-
-    stockEntry.operationType = type;
-
-     // Verificação de estoque baixo
-    if (product.alertThreshold && stockEntry.quantity <= product.alertThreshold) {
-      console.log(`Alerta: ${product.name} está abaixo do limite (${stockEntry.quantity}/${product.alertThreshold})`);
-      // Disparar notificação...
-    }
-
-    await stockEntry.save({ transaction: t });
 
     // Confirma a transação
     await t.commit();
@@ -187,43 +160,40 @@ const getStock = async (req, res) => {
  */
 const updateStockQuantity = async (req, res) => {
   const t = await sequelize.transaction();
-  console.log(req.body)
   try {
-      const { id } = req.params; // ID do estoque
-      const { quantity } = req.body; // Nova quantidade
+    const { id } = req.params; // ID do estoque
+    const { quantity } = req.body; // Nova quantidade
 
-      // Validação: Certificar-se de que a quantidade foi fornecida e é um número válido
-      if (quantity === undefined || isNaN(quantity) || quantity < 0) {
-          await t.rollback();
-          return res.status(400).json({ message: "Quantidade inválida. Deve ser um número maior ou igual a zero." });
-      }
-
-      // Buscar a entrada de estoque pelo ID
-      const stockEntry = await Stock.findByPk(id, { transaction: t });
-
-      if (!stockEntry) {
-          await t.rollback();
-          return res.status(404).json({ message: "Entrada de estoque não encontrada." });
-      }
-
-      // Atualizar a quantidade no banco de dados
-      stockEntry.quantity = quantity;
-      await stockEntry.save({ transaction: t });
-
-      // Confirmar a transação
-      await t.commit();
-
-      return res.status(200).json({
-          message: "Quantidade do estoque atualizada com sucesso!",
-          updatedStock: stockEntry
-      });
-
-  } catch (error) {
+    // Validação: a quantidade deve ser fornecida e ser um número >= 0
+    if (quantity === undefined || isNaN(quantity) || quantity < 0) {
       await t.rollback();
-      console.error("Erro ao atualizar a quantidade do estoque:", error);
-      return res.status(500).json({ message: "Erro interno do servidor." });
+      return res.status(400).json({ message: "Quantidade inválida. Deve ser um número maior ou igual a zero." });
+    }
+
+    // Buscar a entrada de estoque pelo ID
+    const stockEntry = await Stock.findByPk(id, { transaction: t });
+    if (!stockEntry) {
+      await t.rollback();
+      return res.status(404).json({ message: "Entrada de estoque não encontrada." });
+    }
+
+    // Atualizar a quantidade no registro
+    stockEntry.quantity = quantity;
+    await stockEntry.save({ transaction: t });
+
+    // Confirma a transação e retorna o sucesso
+    await t.commit();
+    return res.status(200).json({
+      message: "Quantidade do estoque atualizada com sucesso!",
+      updatedStock: stockEntry
+    });
+  } catch (error) {
+    await t.rollback();
+    console.error("Erro ao atualizar a quantidade do estoque:", error);
+    return res.status(500).json({ message: "Erro interno do servidor." });
   }
 };
+
 
 /**
  * Função para obter o histórico de transações.
