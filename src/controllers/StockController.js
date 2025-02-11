@@ -161,7 +161,7 @@ const getStock = async (req, res) => {
 const updateStockQuantity = async (req, res) => {
   const t = await sequelize.transaction();
   try {
-    const { id } = req.params; // ID do estoque
+    const { id } = req.params; // ID do produto no estoque
     const { quantity } = req.body; // Nova quantidade
 
     // Validação: a quantidade deve ser fornecida e ser um número >= 0
@@ -170,8 +170,11 @@ const updateStockQuantity = async (req, res) => {
       return res.status(400).json({ message: "Quantidade inválida. Deve ser um número maior ou igual a zero." });
     }
 
-    // Buscar a entrada de estoque pelo ID
-    const stockEntry = await Stock.findByPk(id, { transaction: t });
+    // Buscar a entrada de estoque pelo ID do produto
+    const stockEntry = await Stock.findOne({
+      where: { productId: id },
+      transaction: t
+    });
     if (!stockEntry) {
       await t.rollback();
       return res.status(404).json({ message: "Entrada de estoque não encontrada." });

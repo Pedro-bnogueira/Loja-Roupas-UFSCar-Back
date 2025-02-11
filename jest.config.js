@@ -3,7 +3,7 @@ module.exports = {
     verbose: true,
 
     // Retira os console.log durante a execução dos testes
-    //silent: true,
+    silent: true,
     
     // Define o ambiente de testes para Node.js
     testEnvironment: 'node',

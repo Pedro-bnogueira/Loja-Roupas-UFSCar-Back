@@ -476,7 +476,7 @@ describe("Integration tests - Return/Exchange Routes", () => {
       });
 
       const res = await request(app)
-        .put(`/api/update/stock/${stock.id}`)
+        .put(`/api/update/stock/${stock.productId}`)
         .send({ quantity: 30 });
       expect(res.statusCode).toBe(200);
       expect(res.body).toHaveProperty("message", "Quantidade do estoque atualizada com sucesso!");

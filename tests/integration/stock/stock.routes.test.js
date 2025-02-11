@@ -356,7 +356,7 @@ describe("Integration tests - Stock Routes", () => {
       const product = await Product.create({ name: "Prod Upd", price: 100, size: "P", color: "Rosa" });
       const stock = await Stock.create({ productId: product.id, quantity: 10, operationType: "in" });
 
-      const res = await request(app).put(`/api/update/stock/${stock.id}`).send({ quantity: 30 });
+      const res = await request(app).put(`/api/update/stock/${stock.productId}`).send({ quantity: 30 });
       expect(res.statusCode).toBe(200);
       expect(res.body).toHaveProperty("message", "Quantidade do estoque atualizada com sucesso!");
       expect(res.body).toHaveProperty("updatedStock");

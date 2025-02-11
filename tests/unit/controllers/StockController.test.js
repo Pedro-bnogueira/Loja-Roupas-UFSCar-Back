@@ -289,7 +289,7 @@ describe("StockController", () => {
         it("deve retornar 404 se a entrada de estoque não for encontrada", async () => {
             req.params = { id: 1 };
             req.body = { quantity: 10 };
-            Stock.findByPk.mockResolvedValue(null); // Estoque não encontrado
+            Stock.findOne.mockResolvedValue(null); // Estoque não encontrado
             await updateStockQuantity(req, res);
             expect(mockTransaction.rollback).toHaveBeenCalled();
             expect(res.status).toHaveBeenCalledWith(404);
@@ -302,11 +302,11 @@ describe("StockController", () => {
             req.params = { id: 1 };
             req.body = { quantity: 30 };
             const mockStock = {
-                id: 1,
+                productId: 1,
                 quantity: 20,
                 save: jest.fn().mockResolvedValue(true),
             };
-            Stock.findByPk.mockResolvedValue(mockStock);
+            Stock.findOne.mockResolvedValue(mockStock);
             await updateStockQuantity(req, res);
             expect(mockStock.quantity).toBe(30);
             expect(mockStock.save).toHaveBeenCalled();
