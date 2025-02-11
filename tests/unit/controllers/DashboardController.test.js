@@ -86,7 +86,7 @@ describe("DashboardController - getDashboardStats", () => {
         expect(mockTransaction.rollback).toHaveBeenCalled();
         expect(res.status).toHaveBeenCalledWith(401);
         expect(res.json).toHaveBeenCalledWith({
-            message: "Usuário não autenticado.",
+            message: "Sem token de autenticação",
         });
     });
 

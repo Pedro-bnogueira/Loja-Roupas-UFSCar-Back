@@ -30,14 +30,14 @@ describe('LogoutController - logout', () => {
         jest.clearAllMocks();
     });
 
-    it('deve retornar 400 se nenhum token for fornecido', async () => {
+    it('deve retornar 401 se nenhum token for fornecido', async () => {
         req.cookies = {};
         
         await logout(req, res);
         
-        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.status).toHaveBeenCalledWith(401);
         expect(res.json).toHaveBeenCalledWith({
-            message: "No token provided. Already logged out."
+            message: "Sem token de autenticação."
         });
     });
 
