@@ -9,7 +9,7 @@ const Category = sequelize.define('Category',
     },
   },
   {
-    tableName: 'Category',
+    tableName: 'category',
   }
 );
 
