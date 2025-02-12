@@ -135,8 +135,16 @@ describe('AuthController - login function', () => {
     expect(bcrypt.compare).toHaveBeenCalledWith("senhaCorreta", "hashedPassword");
     expect(jwt.sign).toHaveBeenCalled();
     expect(ActiveSession.upsert).toHaveBeenCalled();
-    expect(res.cookie).toHaveBeenCalledWith("LojaRoupa", "fakeToken");
+    expect(res.cookie).toHaveBeenCalledWith(
+      "LojaRoupa",
+      "fakeToken",
+      expect.objectContaining({
+        httpOnly: true,
+        sameSite: "None",
+        secure: false,
+      })
+    );
     expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith({ status: 'success', message: 'Login realizado com sucesso.' });
+    expect(res.json).toHaveBeenCalledWith({ status: 'success', message: 'Login realizado com sucesso.', token: 'fakeToken' });
   });
 });
