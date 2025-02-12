@@ -62,14 +62,14 @@ const registerStockMovement = async (req, res) => {
     // Registro no Model "Stock"
     // Verifica se já existe um registro de Stock para esse productId
     let stockEntry = await Stock.findOne({
-      where: { productId },
+      where: { productId: product.id },
       transaction: t,
     });
 
     if (!stockEntry) {
       // Se não existir, cria
       stockEntry = await Stock.create({
-        productId,
+        productId: product.id,
         quantity: quantity, 
         operationType: type,
       }, { transaction: t });
