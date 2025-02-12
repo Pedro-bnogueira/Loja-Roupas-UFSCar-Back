@@ -161,7 +161,7 @@ const getDashboardStats = async (req, res) => {
         const inventoryByCategory = await Stock.findAll({
             attributes: [
                 [
-                    sequelize.literal("`product->category`.`name`"),
+                    sequelize.literal("`Product->category`.`name`"),
                     "categoryName",
                 ],
                 [
