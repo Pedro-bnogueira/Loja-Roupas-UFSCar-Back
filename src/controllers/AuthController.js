@@ -120,7 +120,11 @@ const login = async (req, res) => {
         });
 
         // Define o cookie com o token JWT
-        res.cookie(COOKIE_NAME, token);
+        res.cookie(COOKIE_NAME, token, {
+          httpOnly: true,          // Garante que o cookie não pode ser acessado via JavaScript no navegador
+          sameSite: 'None',        // Permite o envio do cookie entre domínios diferentes
+        });
+
 
         console.log('Authentication successful for user:', email);
         console.log('JWT Token:', token);
