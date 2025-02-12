@@ -30,7 +30,7 @@ const Product = sequelize.define('Product',
     }
   },
   {
-    tableName: 'Product',
+    tableName: 'product',
   }
 );
 
