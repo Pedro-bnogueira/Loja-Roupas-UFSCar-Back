@@ -123,6 +123,7 @@ const login = async (req, res) => {
         res.cookie(COOKIE_NAME, token, {
           httpOnly: true,          // Garante que o cookie não pode ser acessado via JavaScript no navegador
           sameSite: 'None',        // Permite o envio do cookie entre domínios diferentes
+          secure: process.env.NODE_ENV === 'production',
         });
 
 
