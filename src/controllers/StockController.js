@@ -123,7 +123,7 @@ const getStock = async (req, res) => {
       include: [
         {
           model: Product,
-          as: 'product',
+          as: 'Product',
           attributes: ['id', 'name', 'brand', 'price', 'size', 'color', 'alertThreshold'], // Dados do produto
         },
       ],
@@ -135,13 +135,13 @@ const getStock = async (req, res) => {
       productId: stock.productId,
       quantity: stock.quantity,
       product: {
-        id: stock.product.id,
-        name: stock.product.name,
-        brand: stock.product.brand,
-        price: stock.product.price,
-        size: stock.product.size,
-        color: stock.product.color,
-        alertThreshold: stock.product.alertThreshold,
+        id: stock.Product.id,
+        name: stock.Product.name,
+        brand: stock.Product.brand,
+        price: stock.Product.price,
+        size: stock.Product.size,
+        color: stock.Product.color,
+        alertThreshold: stock.Product.alertThreshold,
       },
     }));
 
@@ -207,7 +207,7 @@ const getTransactionHistory = async (req, res) => {
       include: [
         {
           model: Product,
-          as: 'product',
+          as: 'Product',
           attributes: ['id', 'name', 'brand', 'price', 'size', 'color'],
         },
         {
