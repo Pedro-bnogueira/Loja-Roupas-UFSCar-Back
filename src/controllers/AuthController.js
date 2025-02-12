@@ -139,7 +139,7 @@ const login = async (req, res) => {
         console.log('Authentication successful for user:', email);
         console.log('JWT Token:', token);
 
-        return res.status(200).json({ status: 'success', message: 'Login realizado com sucesso.' });
+        return res.status(200).json({ status: 'success', message: 'Login realizado com sucesso.', token: token });
     } catch (error) {
         console.error('Login Error:', error);
         return res.status(500).json({ message: 'Erro de servidor.' });
