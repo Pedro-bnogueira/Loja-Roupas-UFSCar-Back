@@ -127,6 +127,15 @@ const login = async (req, res) => {
         });
 
 
+        // Log para verificar se o cookie foi setado
+        console.log(`Cookie '${COOKIE_NAME}' criado com sucesso. Configurações:`);
+        console.log({
+          httpOnly: true,
+          sameSite: 'None',
+          secure: process.env.NODE_ENV === 'production',
+          token: token
+        });
+
         console.log('Authentication successful for user:', email);
         console.log('JWT Token:', token);
 
