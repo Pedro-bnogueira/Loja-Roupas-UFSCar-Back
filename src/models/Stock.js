@@ -21,7 +21,7 @@ const Stock = sequelize.define('Stock',
     },
   },
   {
-    tableName: 'Stock',
+    tableName: 'stock',
   }
 );
 

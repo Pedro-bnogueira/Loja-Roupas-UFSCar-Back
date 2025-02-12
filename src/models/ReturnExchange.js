@@ -19,7 +19,7 @@ const ReturnExchange = sequelize.define('ReturnExchange',
     },
   },
   {
-    tableName: 'ReturnExchange',
+    tableName: 'return_exchange',
   }
 );
 

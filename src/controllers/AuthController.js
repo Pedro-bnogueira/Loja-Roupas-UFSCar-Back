@@ -120,12 +120,26 @@ const login = async (req, res) => {
         });
 
         // Define o cookie com o token JWT
-        res.cookie(COOKIE_NAME, token);
+        res.cookie(COOKIE_NAME, token, {
+          httpOnly: true,          // Garante que o cookie não pode ser acessado via JavaScript no navegador
+          sameSite: 'None',        // Permite o envio do cookie entre domínios diferentes
+          secure: process.env.NODE_ENV === 'production',
+        });
+
+
+        // Log para verificar se o cookie foi setado
+        console.log(`Cookie '${COOKIE_NAME}' criado com sucesso. Configurações:`);
+        console.log({
+          httpOnly: true,
+          sameSite: 'None',
+          secure: process.env.NODE_ENV === 'production',
+          token: token
+        });
 
         console.log('Authentication successful for user:', email);
         console.log('JWT Token:', token);
 
-        return res.status(200).json({ status: 'success', message: 'Login realizado com sucesso.' });
+        return res.status(200).json({ status: 'success', message: 'Login realizado com sucesso.', token: token });
     } catch (error) {
         console.error('Login Error:', error);
         return res.status(500).json({ message: 'Erro de servidor.' });
