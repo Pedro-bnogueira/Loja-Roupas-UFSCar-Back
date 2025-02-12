@@ -3,6 +3,7 @@
 
 # misc
 .env
+.env.test
 
 # testing
 /coverage
