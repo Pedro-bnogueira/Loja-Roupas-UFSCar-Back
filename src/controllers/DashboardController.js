@@ -97,9 +97,9 @@ const getDashboardStats = async (req, res) => {
         });
 
         let topProduct = null;
-        if (topProductQuery && topProductQuery.product) {
+        if (topProductQuery && topProductQuery.Product) {
             topProduct = {
-                ...topProductQuery.product.get({ plain: true }),
+                ...topProductQuery.Product.get({ plain: true }),
                 totalSold: Number(topProductQuery.dataValues.totalSold),
             };
         }
