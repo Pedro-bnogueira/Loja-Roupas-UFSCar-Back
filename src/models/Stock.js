@@ -27,7 +27,7 @@ const Stock = sequelize.define('Stock',
 
 Stock.belongsTo(Product, {
   foreignKey: 'productId',
-  as: 'product',
+  as: 'Product',
 });
 
 module.exports = Stock;

@@ -26,7 +26,7 @@ const ReturnExchange = sequelize.define('ReturnExchange',
 // Relacionamento: Cada troca ou devolução é associada a um produto e a um usuário
 ReturnExchange.belongsTo(Product, {
   foreignKey: 'productId',
-  as: 'product',
+  as: 'Product',
 });
 
 ReturnExchange.belongsTo(User, {

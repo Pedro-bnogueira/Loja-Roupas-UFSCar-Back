@@ -61,7 +61,7 @@ const TransactionHistory = sequelize.define('TransactionHistory',
 // Configurar associação com o modelo Product
 TransactionHistory.belongsTo(Product, {
   foreignKey: 'productId',
-  as: 'product',
+  as: 'Product',
 });
 
 // Configurar associação com o modelo User
