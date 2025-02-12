@@ -81,7 +81,7 @@ const getDashboardStats = async (req, res) => {
             include: [
                 {
                     model: Product,
-                    as: "product",
+                    as: "Product",
                     attributes: [
                         "id",
                         "name",
@@ -177,7 +177,7 @@ const getDashboardStats = async (req, res) => {
             include: [
                 {
                     model: Product,
-                    as: "product",
+                    as: "Product",
                     attributes: [],
                     include: [
                         {

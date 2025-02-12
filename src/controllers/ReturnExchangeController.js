@@ -39,7 +39,7 @@ const registerReturn = async (req, res) => {
                 include: [
                     {
                         model: Product,
-                        as: "product",
+                        as: "Product",
                     },
                 ],
             }
@@ -139,7 +139,7 @@ const registerExchange = async (req, res) => {
                 include: [
                     {
                         model: Product,
-                        as: "product",
+                        as: "Product",
                     },
                 ],
             }
