@@ -224,7 +224,7 @@ describe("StockController", () => {
                 id: 1,           // db primary key
                 productId: 1,
                 quantity: 20,
-                product: {
+                Product: {
                   id: 1,
                   name: "Produto A",
                   brand: "Marca A",
@@ -344,7 +344,7 @@ describe("StockController", () => {
                 include: [
                     {
                         model: Product,
-                        as: "product",
+                        as: "Product",
                         attributes: ["id", "name", "brand", "price", "size", "color"],
                     },
                     {

@@ -517,8 +517,8 @@ describe("Integration tests - Return/Exchange Routes", () => {
       expect(res.body.transactions.length).toBeGreaterThanOrEqual(1);
 
       const tx = res.body.transactions[0];
-      expect(tx).toHaveProperty("product");
-      expect(tx.product).toHaveProperty("name", product.name);
+      expect(tx).toHaveProperty("Product");
+      expect(tx.Product).toHaveProperty("name", product.name);
       expect(tx).toHaveProperty("user");
       expect(tx.user).toHaveProperty("id", testUser.id);
     });

@@ -318,8 +318,8 @@ describe("Integration tests - Stock Routes", () => {
 
       // Verifica se retorna o produto e usuário
       const tx = res.body.transactions[0];
-      expect(tx).toHaveProperty("product");
-      expect(tx.product).toHaveProperty("name", "Produto Hist");
+      expect(tx).toHaveProperty("Product");
+      expect(tx.Product).toHaveProperty("name", "Produto Hist");
       expect(tx).toHaveProperty("user");
       expect(tx.user).toHaveProperty("id", adminUser.id);
     });

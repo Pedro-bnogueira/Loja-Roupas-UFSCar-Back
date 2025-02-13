@@ -110,7 +110,7 @@ describe("DashboardController - getDashboardStats", () => {
         // Mocks para o produto mais vendido (topProduct)
         TransactionHistory.findOne.mockResolvedValue({
             dataValues: { totalSold: "10" },
-            product: {
+            Product: {
                 get: jest.fn(() => ({
                     id: 101,
                     name: "Product A",
